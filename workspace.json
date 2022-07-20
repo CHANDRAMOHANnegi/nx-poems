@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "poems": "apps/poems",
-    "poems-e2e": "apps/poems-e2e"
+    "poems-e2e": "apps/poems-e2e",
+    "shared-ui": "libs/shared/ui"
   }
 }
