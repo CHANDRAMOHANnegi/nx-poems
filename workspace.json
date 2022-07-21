@@ -2,8 +2,10 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "models": "libs/models",
     "poems": "apps/poems",
     "poems-e2e": "apps/poems-e2e",
-    "shared-ui": "libs/shared/ui"
+    "shared-ui": "libs/shared/ui",
+    "ui": "libs/ui"
   }
 }

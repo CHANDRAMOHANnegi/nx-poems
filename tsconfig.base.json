@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@poems-app/shared/ui": ["libs/shared/ui/src/index.ts"]
+      "@poems-app/models": ["libs/models/src/index.ts"],
+      "@poems-app/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@poems-app/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
