@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@poems-app/models": ["libs/models/src/index.ts"],
+      "@poems-app/services": ["libs/services/src/index.ts"],
       "@poems-app/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@poems-app/store": ["libs/store/src/index.ts"],
       "@poems-app/ui": ["libs/ui/src/index.ts"]
     }
   },

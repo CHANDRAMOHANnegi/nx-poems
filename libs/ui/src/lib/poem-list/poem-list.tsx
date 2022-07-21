@@ -18,7 +18,11 @@ export function PoemList(props: PoemListProps) {
 
   return (
     <View>
-      <FlatList data={list} renderItem={renderItem} />
+      <FlatList
+        data={list}
+        renderItem={renderItem}
+        keyExtractor={({ title }) => title}
+      />
     </View>
   );
 }

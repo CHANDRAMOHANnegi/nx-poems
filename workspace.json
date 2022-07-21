@@ -5,7 +5,9 @@
     "models": "libs/models",
     "poems": "apps/poems",
     "poems-e2e": "apps/poems-e2e",
+    "services": "libs/services",
     "shared-ui": "libs/shared/ui",
+    "store": "libs/store",
     "ui": "libs/ui"
   }
 }
