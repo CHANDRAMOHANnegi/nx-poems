@@ -1,7 +1,8 @@
-import { Poem } from '@poems-app/models';
 import React from 'react';
+import { Poem } from '@poems-app/models';
 
 import { View, Text } from 'react-native';
+import { ScrollView } from 'react-native';
 
 /* eslint-disable-next-line */
 export interface PoemCardProps {
@@ -10,15 +11,15 @@ export interface PoemCardProps {
 
 export function PoemCard(props: PoemCardProps) {
   return (
-    <View>
+    <ScrollView>
       <Text>{props.poem.author}</Text>
       <Text>{props.poem.title}</Text>
       <View>
         {props.poem.lines.map((line) => (
-          <Text>{line}</Text>
+          <Text key={line}>{line}</Text>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

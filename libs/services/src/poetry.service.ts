@@ -8,7 +8,7 @@ export async function getPoemOfTheDay(): Promise<PoemResponse[]> {
     method: 'GET',
   });
 
-  console.log('=====------>>>', response);
+  // console.log('=====------>>>', response);
 
   if (response.ok) {
     const poemResponse = await response.json();

@@ -1,4 +1,4 @@
-import { LoadingStatus } from '@poems-app/models';
+import { LoadingStatus, Poem } from '@poems-app/models';
 import {
   mapPoemResponseToPoem,
   PoemResponse,
@@ -12,49 +12,33 @@ import {
   EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { RootState } from '../root/root-state.interface';
 
 export const POEM_OF_THE_DAY_FEATURE_KEY = 'poemOfTheDay';
 
-/*
- * Update these interfaces according to your requirements.
- */
 export interface PoemOfTheDayEntity {
-  id: number;
+  title: string;
+  author: string;
 }
 
 export interface PoemOfTheDayState extends EntityState<PoemOfTheDayEntity> {
   loadingStatus: LoadingStatus;
-  poem: any;
+  poem: Poem | null;
   error: string;
 }
 
-export const poemOfTheDayAdapter = createEntityAdapter<PoemOfTheDayEntity>();
+export const poemOfTheDayAdapter = createEntityAdapter<PoemOfTheDayEntity>({
+  selectId: (poem) => poem.title,
+});
 
-/**
- * Export an effect using createAsyncThunk from
- * the Redux Toolkit: https://redux-toolkit.js.org/api/createAsyncThunk
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(fetchPoemOfTheDay())
- * }, [dispatch]);
- * ```
- */
 export const fetchPoemOfTheDay = createAsyncThunk(
   'poemOfTheDay/fetchStatus',
   async (_, { rejectWithValue }) => {
     try {
       const poemResponses: PoemResponse[] =
         await poetryService.getPoemOfTheDay();
-        console.log('======>>>>>>>>>>',poemResponses);
-        
+      console.log('======>>>>>>>>>>', poemResponses);
+
       return mapPoemResponseToPoem(poemResponses[0]);
     } catch (error) {
       return rejectWithValue({ error });
@@ -67,6 +51,8 @@ export const initialPoemOfTheDayState: PoemOfTheDayState =
     loadingStatus: 'not loaded',
     poem: null,
     error: '',
+    entities: [],
+    ids: [],
   });
 
 export const poemOfTheDaySlice = createSlice({
@@ -84,11 +70,10 @@ export const poemOfTheDaySlice = createSlice({
       })
       .addCase(
         fetchPoemOfTheDay.fulfilled,
-        (
-          state: PoemOfTheDayState,
-          action: PayloadAction<PoemOfTheDayEntity[]>
-        ) => {
-          poemOfTheDayAdapter.setAll(state, action.payload);
+        (state: PoemOfTheDayState, action:any) => {
+          console.log(action);
+          // poemOfTheDayAdapter.setAll(state, action.payload);
+          state.poem = action.payload;
           state.loadingStatus = 'loaded';
         }
       )
@@ -102,56 +87,42 @@ export const poemOfTheDaySlice = createSlice({
   },
 });
 
-/*
- * Export reducer for store configuration.
- */
 export const poemOfTheDayReducer = poemOfTheDaySlice.reducer;
 
-/*
- * Export action creators to be dispatched. For use with the `useDispatch` hook.
- *
- * e.g.
- * ```
- * import React, { useEffect } from 'react';
- * import { useDispatch } from 'react-redux';
- *
- * // ...
- *
- * const dispatch = useDispatch();
- * useEffect(() => {
- *   dispatch(poemOfTheDayActions.add({ id: 1 }))
- * }, [dispatch]);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#usedispatch
- */
 export const poemOfTheDayActions = poemOfTheDaySlice.actions;
 
-/*
- * Export selectors to query state. For use with the `useSelector` hook.
- *
- * e.g.
- * ```
- * import { useSelector } from 'react-redux';
- *
- * // ...
- *
- * const entities = useSelector(selectAllPoemOfTheDay);
- * ```
- *
- * See: https://react-redux.js.org/next/api/hooks#useselector
- */
 const { selectAll, selectEntities } = poemOfTheDayAdapter.getSelectors();
 
-export const getPoemOfTheDayState = (rootState: unknown): PoemOfTheDayState =>
-  rootState[POEM_OF_THE_DAY_FEATURE_KEY];
+export const getPoemOfTheDayState = (rootState: RootState): PoemOfTheDayState =>
+  rootState && rootState[POEM_OF_THE_DAY_FEATURE_KEY];
 
 export const selectAllPoemOfTheDay = createSelector(
   getPoemOfTheDayState,
   selectAll
+  // ,
+  // (po) => {
+  //   console.log('==-------------------===', po);
+  //   return po;
+  // }
 );
 
 export const selectPoemOfTheDayEntities = createSelector(
   getPoemOfTheDayState,
   selectEntities
 );
+
+const getPoemOfTheDay = createSelector(
+  getPoemOfTheDayState,
+  (state: PoemOfTheDayState) => state.poem
+);
+
+const getPoemOfTheDayLoadingStatus = createSelector(
+  getPoemOfTheDayState,
+  (state: PoemOfTheDayState): LoadingStatus => state.loadingStatus
+);
+
+export const poemOfTheDaySelelctors = {
+  getPoemOfTheDayState,
+  getPoemOfTheDay,
+  getPoemOfTheDayLoadingStatus,
+};
